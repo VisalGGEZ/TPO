@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Bottom 2dp Shadow -->
+    <item>
+        <shape  android:shape="rectangle">
+            <corners android:radius="3dp"  />
+            <gradient
+                    android:endColor="#ce3f3e"
+                    android:startColor="#f69164"
+                    android:type="linear" />
+            <solid android:color="@color/colorPrimary" />
+        </shape>
+    </item>
+    <!-- White Top color -->
+    <item android:bottom="2dp">
+        <shape  android:shape="rectangle">
+            <gradient
+                    android:endColor="#ce3f3e"
+                    android:startColor="#f69164"
+                    android:type="linear" />
+            <solid android:color="@color/colorPrimary" />
+        </shape>
+
+    </item>
+</layer-list>

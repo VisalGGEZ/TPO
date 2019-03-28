@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">TPO HR</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="register_success_title">ការចុះឈ្មោះជោគជ័យ</string>
+    <string name="register_success_message">ការចូះឈ្មោះរបស់លោកអ្នក បានបញ្ចប់ដោយជោគជ័យ!
+        ក្រុមការងារយើងខ្ញំនឹងទាក់ទងទៅលោកអ្នក ក្នុងករណីលោកអ្នកត្រូវបានជ្រើសរើស។ សួមអគុណ!​​​
+    </string>
+    <string name="close">បិទ</string>
+    <string-array name="genders_list">
+        <item>ប្រុស</item>
+        <item>ស្រី</item>
+    </string-array>
+
+    <string-array name="degree_list">
+        <item>Ph.D</item>
+        <item>MA</item>
+        <item>BA</item>
+        <item>Associate\'s Degree</item>
+        <item>High School</item>
+    </string-array>
+</resources>
