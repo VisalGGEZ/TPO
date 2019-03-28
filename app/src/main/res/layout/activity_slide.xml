@@ -14,8 +14,8 @@
     
     <me.relex.circleindicator.CircleIndicator android:layout_width="match_parent"
                                               android:layout_marginBottom="20dp"
-                                              app:ci_width="10dp"
-                                              app:ci_height="10dp"
+                                              app:ci_width="5dp"
+                                              app:ci_height="5dp"
                                               android:layout_alignParentBottom="true"
                                               android:id="@+id/indicator"
                                               android:layout_height="48dp"/>

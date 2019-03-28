@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat
 import android.os.Build
 import android.content.DialogInterface
 import android.net.Uri
+import android.support.annotation.MainThread
 import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,7 @@ import com.tpo_hr.tpohr.BuildConfig
 import com.tpo_hr.tpohr.models.AccessTokenResponse
 import com.tpo_hr.tpohr.utils.Authorization
 import com.tpo_hr.tpohr.views.dialogs.BaseDialog
+import com.tpo_hr.tpohr.views.dialogs.BaseProgressDialog
 import dagger.android.AndroidInjection
 import id.zelory.compressor.Compressor
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -50,12 +52,13 @@ class MainActivity : AppCompatActivity(), MainView {
     private var mEducation: String = ""
     private var mPhone1: String = ""
     private var mPhone2: String = ""
+    private val SHOW_PROGRESS = "SHOW_PROGRESS"
+    private var baseProgress: BaseProgressDialog? = null
 
     @Inject
     lateinit var mainPresenter: MainPresenter
     @Inject
     lateinit var authorization: Authorization
-
 
     private lateinit var listGenders: Array<String>
     private lateinit var listEducation: Array<String>
@@ -73,7 +76,7 @@ class MainActivity : AppCompatActivity(), MainView {
         listEducation = resources.getStringArray(R.array.degree_list)
 
         setListenerViews()
-
+        baseProgress = BaseProgressDialog(this)
         mainPresenter.getAccessToken(
             grantType = "client_credentials",
             clientId = 2,
@@ -284,7 +287,6 @@ class MainActivity : AppCompatActivity(), MainView {
     private fun openCameraFace() {
         if (checkPermissionCamera()) {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            intent.putExtra("android.intent.extras.CAMERA_FACING", 1)
             startActivityForResult(intent, CAMERA_PHOTO_REQUEST_CODE)
         } else {
             requestPermissionCamera()
@@ -434,5 +436,16 @@ class MainActivity : AppCompatActivity(), MainView {
         }
         imm.hideSoftInputFromWindow(view.windowToken, 0)
 
+    }
+
+    override fun onLoading() {
+        baseProgress?.show(this.supportFragmentManager, SHOW_PROGRESS)
+    }
+
+    override fun onHideLoading() {
+        baseProgress?.let {
+            it.killItSelf()
+            baseProgress = null
+        }
     }
 }

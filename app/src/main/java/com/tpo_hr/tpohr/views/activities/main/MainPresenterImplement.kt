@@ -51,7 +51,7 @@ class MainPresenterImplement(
         phone2: String
     ) {
 
-//        val registerRequest = RegisterRequest(name = name, sex = sex, dob = dob, age = age, education = education, thaiLevel = thaiLevel, phone1 = phone1, phone2 = phone2)
+        mainView.onLoading()
 
         val reqFile = RequestBody.create(MediaType.parse("image/*"), photo)
         val body = MultipartBody.Part.createFormData("photo", photo.name, reqFile)
@@ -69,12 +69,14 @@ class MainPresenterImplement(
             )
         )
             .subscribe({
+                mainView.onHideLoading()
                 if (it.code() == 200) {
                     mainView.onRegisterSuccess()
                 } else {
                     mainView.onRegisterFail()
                 }
             }, {
+                mainView.onHideLoading()
                 mainView.onRegisterFail()
             })
     }

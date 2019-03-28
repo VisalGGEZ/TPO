@@ -7,4 +7,6 @@ interface MainView {
     fun onGetTokenFail()
     fun onRegisterFail()
     fun onRegisterSuccess()
+    fun onLoading()
+    fun onHideLoading()
 }

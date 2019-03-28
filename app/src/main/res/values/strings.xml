@@ -14,10 +14,17 @@
     </string-array>
 
     <string-array name="degree_list">
-        <item>Ph.D</item>
-        <item>MA</item>
-        <item>BA</item>
-        <item>Associate\'s Degree</item>
-        <item>High School</item>
+        <item>ថ្នាក់ទី១២</item>
+        <item>ថ្នាក់ទី១១</item>
+        <item>ថ្នាក់ទី១០</item>
+        <item>ថ្នាក់ទី៩</item>
+        <item>ថ្នាក់ទី៨</item>
+        <item>ថ្នាក់ទី៧</item>
+        <item>ថ្នាក់ទី៦</item>
+        <item>ថ្នាក់ទី៥</item>
+        <item>ថ្នាក់ទី៤</item>
+        <item>ថ្នាក់ទី៣</item>
+        <item>ថ្នាក់ទី២</item>
+        <item>ថ្នាក់ទី១</item>
     </string-array>
 </resources>
