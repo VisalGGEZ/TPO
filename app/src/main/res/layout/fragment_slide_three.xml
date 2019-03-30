@@ -13,7 +13,7 @@
 
         <TextView style="@style/TextStyleGeneralAsWhite"
                   android:layout_gravity="center_horizontal"
-                  android:text="ផ្ដល់ជូននូវវគ្គបណ្ដុះបណ្កាល \n មុនចូលបម្រើការងារ"
+                  android:text="ផ្តល់ជូននូវវគ្គបណ្តុះបណ្តាល\nមុនចូលបម្រើការងារ"
                   android:gravity="center"/>
 
         <LinearLayout android:layout_width="match_parent"

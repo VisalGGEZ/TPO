@@ -32,7 +32,7 @@
             <TextView style="@style/TextStyleGeneralAsPrimary"
                       android:layout_marginTop="5dp"
                       android:layout_gravity="center_horizontal"
-                      android:text="សូមបំពេញ​ និងពិនិត្យព័ត៏មានផ្ទាល់ខ្លួន \nរបស់លោកអ្នកឲ្យបានត្រឹមត្រូវ​"
+                      android:text="សូមបំពេញ និងពិនិត្យព័ត៌មានផ្ទាល់ខ្លួន\nរបស់លោកអ្នកឲ្យបានត្រឹមត្រូវ​"
                       android:gravity="center"/>
 
             <ScrollView
@@ -105,7 +105,7 @@
                                   android:layout_weight="1.1" android:layout_height="wrap_content">
 
                         <TextView style="@style/TextStyleGeneralAsPrimarySizeNormal"
-                                  android:text="ថ្ថៃ ខែ ឆ្នាំកំណើត"/>
+                                  android:text="ថ្ងៃ ខែ ឆ្នាំកំណើត"/>
 
                         <RelativeLayout android:layout_width="match_parent"
                                         android:layout_marginTop="5dp"
@@ -151,7 +151,7 @@
 
                 <TextView style="@style/TextStyleGeneralAsPrimarySizeNormal"
                           android:layout_marginTop="10dp"
-                          android:text="កម្រិតវប្បធម៏ ឬកម្រិតសិក្សា​​"/>
+                          android:text="កម្រិតវប្បធម៌ ឬកម្រិតសិក្សា​​"/>
 
                 <RelativeLayout android:layout_width="match_parent"
                                 android:layout_marginTop="5dp"
@@ -216,7 +216,7 @@
 
                         <TextView style="@style/TextStyleGeneralAsPrimarySizeNormal"
                                   android:layout_marginTop="10dp"
-                                  android:text="លេខទុរស័ព្ទខ្សែទី១"/>
+                                  android:text="លេខទូរស័ព្ទខ្សែទី១"/>
 
                         <EditText style="@style/EditTextStyleGeneralPrimary" android:layout_marginTop="5dp"
                                   android:inputType="number"
@@ -232,7 +232,7 @@
 
                         <TextView style="@style/TextStyleGeneralAsPrimarySizeNormal"
                                   android:layout_marginTop="10dp"
-                                  android:text="លេខទុរស័ព្ទខ្សែទី២"/>
+                                  android:text="លេខទូរស័ព្ទខ្សែទី២"/>
 
                         <EditText style="@style/EditTextStyleGeneralPrimary" android:layout_marginTop="5dp"
                                   android:id="@+id/etPhone2"

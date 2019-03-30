@@ -39,7 +39,7 @@
                        android:layout_height="100dp"
                        android:src="@drawable/safety"/>
 
-            <TextView android:text="សុវត្ដិភាព"
+            <TextView android:text="សុវត្ថិភាព"
                       style="@style/TextStyleGeneralAsWhite"
                       android:layout_gravity="center_vertical"
                       android:layout_marginStart="30dp"/>

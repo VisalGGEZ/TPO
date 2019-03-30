@@ -387,7 +387,7 @@ class MainActivity : AppCompatActivity(), MainView {
 
     override fun onRegisterFail() {
         BaseDialog("ការចុះឈ្មោះបរាជ័យ",
-            resources.getString(R.string.register_success_message),
+            resources.getString(R.string.register_failed_message),
             R.drawable.cross_signxxxhdpi,
             "យល់ព្រម", {}, {}).show(this@MainActivity.supportFragmentManager, SIMPLE_DIALOG)
 

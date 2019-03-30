@@ -40,7 +40,7 @@
 
         <TextView style="@style/TextStyleGeneralAsWhiteSplashScreen"
                   android:layout_gravity="center_horizontal"
-                  android:text="សូមស្វាគមន៏"/>
+                  android:text="សូមស្វាគមន៍"/>
 
     </LinearLayout>
 
