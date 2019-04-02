@@ -35,12 +35,14 @@
         <TextView style="@style/TextStyleGeneralAsWhiteSplashScreen"
                   android:layout_marginTop="10dp"
                   android:textStyle="bold"
+                  android:id="@+id/tvSplashEnglish"
                   android:layout_gravity="center_horizontal"
                   android:text="TPO HR"/>
 
         <TextView style="@style/TextStyleGeneralAsWhiteSplashScreen"
                   android:layout_gravity="center_horizontal"
-                  android:text="សូមស្វាគមន៏"/>
+                  android:id="@+id/tvSplashKhmer"
+                  android:text="សូមស្វាគមន៍"/>
 
     </LinearLayout>
 

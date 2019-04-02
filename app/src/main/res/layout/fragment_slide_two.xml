@@ -6,16 +6,18 @@
                 android:layout_height="match_parent"
                 tools:context=".views.activities.slide.fragments.SlideTwoFragment">
 
+    <TextView
+            android:text="យើងយកចិត្តទុកដាក់លើ"
+            android:id="@+id/tvHeaderTitle"
+            style="@style/TextStyleHeaderTitle"
+    />
+
     <LinearLayout android:layout_width="wrap_content"
+                  android:layout_below="@+id/tvHeaderTitle"
                   android:layout_height="wrap_content"
                   android:layout_centerInParent="true"
                   android:orientation="vertical"
                   android:gravity="center_horizontal">
-
-        <TextView
-                android:text="យើងយកចិត្តទុកដាក់លើ"
-                style="@style/TextStyleGeneralAsWhite"
-        />
 
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="wrap_content"
@@ -39,7 +41,7 @@
                        android:layout_height="100dp"
                        android:src="@drawable/safety"/>
 
-            <TextView android:text="សុវត្ដិភាព"
+            <TextView android:text="សុវត្ថិភាព"
                       style="@style/TextStyleGeneralAsWhite"
                       android:layout_gravity="center_vertical"
                       android:layout_marginStart="30dp"/>

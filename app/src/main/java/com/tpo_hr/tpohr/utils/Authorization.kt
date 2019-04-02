@@ -11,6 +11,12 @@ class Authorization(private val sharedPreferences: SharedPreferences) {
     private val ACCESS_TOKEN = "ACCESS_TOKEN"
     private val EXPIRE_DATE = "EXPIRE_DATE"
     private val TOKEN_TYPE = "TOKEN_TYPE"
+    private val SHOW_SLIDE = "SHOW_SLIDE"
+
+
+    var isShowSlide: Boolean
+        get() = sharedPreferences.getBoolean(SHOW_SLIDE, false)
+        set(value) = sharedPreferences.edit().putBoolean(SHOW_SLIDE, value).apply()
 
 
     var wasLogin: Boolean

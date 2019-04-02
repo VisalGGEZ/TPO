@@ -14,13 +14,14 @@ interface MainPresenter{
 
     fun registerCandidate(
         authorization: String,
+        submission_date: String,
         photo: File,
         name: String,
         sex: String,
         dob: String,
         age: String,
         education: String,
-        thaiLevel: Int,
+        thaiLevel: String,
         phone1: String,
         phone2: String)
 

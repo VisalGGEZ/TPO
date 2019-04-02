@@ -12,9 +12,11 @@ import retrofit2.http.*
 interface MainService {
 
     @Multipart
-    @POST("/public/api/candidate/register")
+    @POST("/api/candidate/register")
     fun registerCandidate(
+        @Header("Authorization") auth: String,
         @Part("name") name: RequestBody,
+        @Part("submission_date") submission_date: RequestBody,
         @Part("sex") sex: RequestBody,
         @Part("dob") dob: RequestBody,
         @Part("age") age: RequestBody,
@@ -25,7 +27,7 @@ interface MainService {
         @Part photo: MultipartBody.Part
     ): Observable<Response<RegisterModel>>
 
-    @POST("/public/oauth/token")
+    @POST("/oauth/token")
     fun getAccessToken(@Body accessTokenRequest: AccessTokenRequest): Observable<Response<AccessTokenResponse>>
 
 }

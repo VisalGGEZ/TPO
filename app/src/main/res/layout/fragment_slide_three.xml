@@ -6,18 +6,18 @@
                 android:background="@color/colorPrimary"
                 tools:context=".views.activities.slide.fragments.SlideThreeFragment">
 
+    <TextView style="@style/TextStyleHeaderTitle"
+              android:id="@+id/tvHeaderTitle"
+              android:text="ផ្តល់ជូននូវវគ្គបណ្តុះបណ្តាល\nមុនចូលបម្រើការងារ"/>
+
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:orientation="vertical"
+                  android:layout_below="@+id/tvHeaderTitle"
                   android:layout_centerInParent="true">
 
-        <TextView style="@style/TextStyleGeneralAsWhite"
-                  android:layout_gravity="center_horizontal"
-                  android:text="ផ្ដល់ជូននូវវគ្គបណ្ដុះបណ្កាល \n មុនចូលបម្រើការងារ"
-                  android:gravity="center"/>
-
         <LinearLayout android:layout_width="match_parent"
-                      android:layout_marginTop="20dp"
+                      android:layout_marginTop="5dp"
                       android:layout_height="wrap_content"
                       android:orientation="horizontal">
 
@@ -44,7 +44,7 @@
                   android:gravity="center"/>
 
         <LinearLayout android:layout_width="match_parent"
-                      android:layout_marginTop="20dp"
+                      android:layout_marginTop="5dp"
                       android:layout_height="wrap_content"
                       android:orientation="horizontal">
 
@@ -68,5 +68,16 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="#64b5f6"
+              android:padding="20dp"
+              android:layout_marginBottom="6dp"
+              android:id="@+id/tvSkip"
+              android:text="Get Started"
+              android:layout_centerHorizontal="true"
+              android:layout_alignParentBottom="true"
+              android:textSize="18sp"/>
 
 </RelativeLayout>

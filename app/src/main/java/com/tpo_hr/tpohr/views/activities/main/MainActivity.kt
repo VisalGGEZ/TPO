@@ -17,16 +17,28 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.app.ActivityCompat
 import android.os.Build
 import android.content.DialogInterface
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.graphics.Typeface
+import android.media.ExifInterface
 import android.net.Uri
+import android.os.Environment
 import android.support.annotation.MainThread
 import android.support.v7.app.AlertDialog
+import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import com.tpo_hr.tpohr.BuildConfig
 import com.tpo_hr.tpohr.models.AccessTokenResponse
 import com.tpo_hr.tpohr.utils.Authorization
+import com.tpo_hr.tpohr.utils.KeyboardUtils
+import com.tpo_hr.tpohr.utils.PathUtils
 import com.tpo_hr.tpohr.views.dialogs.BaseDialog
 import com.tpo_hr.tpohr.views.dialogs.BaseProgressDialog
 import dagger.android.AndroidInjection
@@ -47,13 +59,17 @@ class MainActivity : AppCompatActivity(), MainView {
     private var nName: String = ""
     private var mSex: String = ""
     private var mDob: String = ""
+    private var submission_date = ""
     private var mAge: String = ""
-    private var mThaiLevel: Int = 1
+    private var mThaiLevel: String = "មិនចេះ"
     private var mEducation: String = ""
     private var mPhone1: String = ""
     private var mPhone2: String = ""
     private val SHOW_PROGRESS = "SHOW_PROGRESS"
     private var baseProgress: BaseProgressDialog? = null
+    private var mDayAge = 0
+    private var mMonthAge = 0
+    private var mYearAge = 0
 
     @Inject
     lateinit var mainPresenter: MainPresenter
@@ -62,6 +78,11 @@ class MainActivity : AppCompatActivity(), MainView {
 
     private lateinit var listGenders: Array<String>
     private lateinit var listEducation: Array<String>
+
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
 
     override fun attachBaseContext(newBase: Context?) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
@@ -72,10 +93,18 @@ class MainActivity : AppCompatActivity(), MainView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        if (!authorization.isShowSlide) {
+            authorization.isShowSlide = true
+        }
+
+        getCurrentDateToDate()
+        setTextBold()
+        checkKeyboardShow()
+
         listGenders = resources.getStringArray(R.array.genders_list)
         listEducation = resources.getStringArray(R.array.degree_list)
 
-        setListenerViews()
+        setListenerListenerViews()
         baseProgress = BaseProgressDialog(this)
         mainPresenter.getAccessToken(
             grantType = "client_credentials",
@@ -90,7 +119,7 @@ class MainActivity : AppCompatActivity(), MainView {
     private val PERMISSION_REQUEST_CAMERA_CODE: Int = 129
 
     @SuppressLint("SetTextI18n", "SimpleDateFormat")
-    private fun setListenerViews() {
+    private fun setListenerListenerViews() {
 
         llWrapperMain.setOnClickListener {
             hideKeyboard(this)
@@ -98,7 +127,7 @@ class MainActivity : AppCompatActivity(), MainView {
 
 
         ivDate.setOnClickListener {
-            val myDatePicker = MonthYearPickerDialog.newInstance(0, 0, 0, 0, MonthYearPickerDialog.DD_MM_YYYY)
+            val myDatePicker = MonthYearPickerDialog.newInstance(month, day, year, 0, MonthYearPickerDialog.DD_MM_YYYY)
 
             myDatePicker.setListener { _, year, month, dayOfMonth ->
                 etDate.setText(
@@ -106,13 +135,32 @@ class MainActivity : AppCompatActivity(), MainView {
                         year.toString()
                     )}"
                 )
+
+                day = dayOfMonth
+                this.month = month
+                this.year = year
+
+
+                submission_date =
+                    "$year-${myDatePicker.addZero(month.toString())}-${myDatePicker.addZero(dayOfMonth.toString())}"
             }
 
             myDatePicker.show(supportFragmentManager, "Select Date")
         }
 
+
+        etPhone1.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    hideKeyboard(this@MainActivity)
+                }
+                return false
+            }
+
+        })
+
         ivDateOfBirth.setOnClickListener {
-            val myDatePicker = MonthYearPickerDialog.newInstance(0, 0, 0, 0, MonthYearPickerDialog.DD_MM_YYYY)
+            val myDatePicker = MonthYearPickerDialog.newInstance(mMonthAge, mDayAge, mYearAge, 0, MonthYearPickerDialog.DD_MM_YYYY)
 
             myDatePicker.setListener { _, year, month, dayOfMonth ->
                 etDateOfBirth.setText(
@@ -120,6 +168,10 @@ class MainActivity : AppCompatActivity(), MainView {
                         year.toString()
                     )}"
                 )
+
+                mDayAge = dayOfMonth
+                mMonthAge = month
+                mYearAge = year
 
                 val userAge = SimpleDateFormat("dd/MM/yyyy").parse("$dayOfMonth/$month/$year")
 
@@ -132,7 +184,7 @@ class MainActivity : AppCompatActivity(), MainView {
                 etAge.setText(myDatePicker.covertToKhmerNumber(age.toString()))
 
 
-                mDob = "$year-$month-$dayOfMonth"
+                mDob = "$year-${myDatePicker.addZero(month.toString())}-${myDatePicker.addZero(dayOfMonth.toString())}"
             }
 
             myDatePicker.show(supportFragmentManager, "Select Date")
@@ -149,10 +201,16 @@ class MainActivity : AppCompatActivity(), MainView {
             mPhone1 = etPhone1.text.toString()
             mPhone2 = etPhone2.text.toString()
 
-            photoFile?.let { photo ->
+            if (nName == "" || photoFile == null || mPhone1 == "" || mDob == "") {
+                BaseDialog("ការចុះឈ្មោះបរាជ័យ",
+                    resources.getString(R.string.register_failed_message),
+                    R.drawable.cross_signxxxhdpi,
+                    "យល់ព្រម", {}, {}).show(this@MainActivity.supportFragmentManager, SIMPLE_DIALOG)
+            } else {
                 mainPresenter.registerCandidate(
                     "Bearer $accessToken",
-                    photo = photo,
+                    submission_date = submission_date,
+                    photo = photoFile!!,
                     name = nName,
                     sex = mSex,
                     dob = mDob,
@@ -162,8 +220,6 @@ class MainActivity : AppCompatActivity(), MainView {
                     phone1 = mPhone1,
                     phone2 = mPhone2
                 )
-
-                Toast.makeText(this, "កំពុងដំណើរការ", Toast.LENGTH_LONG).show()
             }
 
         }
@@ -194,9 +250,9 @@ class MainActivity : AppCompatActivity(), MainView {
 
         rgThaiLevel.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
-                R.id.rbOne -> mThaiLevel = 1
-                R.id.rbTwo -> mThaiLevel = 2
-                R.id.rbThree -> mThaiLevel = 3
+                R.id.rbOne -> mThaiLevel = rbOne.text.toString()
+                R.id.rbTwo -> mThaiLevel = rbTwo.text.toString()
+                R.id.rbThree -> mThaiLevel = rbThree.text.toString()
             }
             hideKeyboard(this)
         }
@@ -209,19 +265,25 @@ class MainActivity : AppCompatActivity(), MainView {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 CAMERA_PHOTO_REQUEST_CODE -> {
-                    val bitmap = data?.extras?.get("data") as Bitmap
-                    bitmap.let {
-                        ivImageFront.setImageBitmap(it)
-                        llImageFront.visibility = View.VISIBLE
-
+//                    val bitmap = data?.extras?.get("data") as Bitmap
+//                    bitmap.let {
 
                         // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
-                        val tempUri = getImageUri(applicationContext, it)
+//                        val tempUri = getImageUri(this@MainActivity, it)
 
                         // CALL THIS METHOD TO GET THE ACTUAL PATH
-                        photoFile = File(getRealPathFromURI(tempUri))
-                    }
+//                        photoFile = File(getRealPathFromURI(tempUri))
+
+                        photoFile = File(PathUtils.getPath(this, cameraImageUri))
+
+                        val rotateImageURI = rotateImageView(photoFile!!.absolutePath, BitmapFactory.decodeFile(photoFile!!.path))
+
+                        ivImageFront.setImageBitmap(rotateImageURI)
+                        llImageFront.visibility = View.VISIBLE
+//                    }
                 }
+
+
             }
         }
     }
@@ -284,13 +346,26 @@ class MainActivity : AppCompatActivity(), MainView {
             .show()
     }
 
+    private var cameraImageUri: Uri? = null
+
     private fun openCameraFace() {
         if (checkPermissionCamera()) {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            cameraImageUri = getOutputMediaFileUri(1)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraImageUri);
             startActivityForResult(intent, CAMERA_PHOTO_REQUEST_CODE)
         } else {
             requestPermissionCamera()
         }
+    }
+
+    override fun retryToken() {
+        mainPresenter.getAccessToken(
+            grantType = "client_credentials",
+            clientId = 2,
+            clientSecret = BuildConfig.BASIC_KEY,
+            scope = ""
+        )
     }
 
     private fun requestPermissionCamera() {
@@ -389,7 +464,7 @@ class MainActivity : AppCompatActivity(), MainView {
 
     override fun onRegisterFail() {
         BaseDialog("ការចុះឈ្មោះបរាជ័យ",
-            resources.getString(R.string.register_success_message),
+            resources.getString(R.string.register_failed_message),
             R.drawable.cross_signxxxhdpi,
             "យល់ព្រម", {}, {}).show(this@MainActivity.supportFragmentManager, SIMPLE_DIALOG)
 
@@ -403,12 +478,14 @@ class MainActivity : AppCompatActivity(), MainView {
             resources.getString(R.string.close),
             {},
             {}).show(this@MainActivity.supportFragmentManager, SIMPLE_DIALOG)
+
+        clearText()
     }
 
     private fun getImageUri(inContext: Context, inImage: Bitmap): Uri {
         val bytes = ByteArrayOutputStream()
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null)
+        inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
         return Uri.parse(path)
     }
 
@@ -439,7 +516,12 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     override fun onLoading() {
-        baseProgress?.show(this.supportFragmentManager, SHOW_PROGRESS)
+        if (baseProgress != null) {
+            baseProgress?.show(this.supportFragmentManager, SHOW_PROGRESS)
+        } else {
+            baseProgress = BaseProgressDialog(this)
+            baseProgress?.show(this.supportFragmentManager, SHOW_PROGRESS)
+        }
     }
 
     override fun onHideLoading() {
@@ -447,5 +529,144 @@ class MainActivity : AppCompatActivity(), MainView {
             it.killItSelf()
             baseProgress = null
         }
+    }
+
+    private var year: Int = 0
+    private var month: Int = 0
+    private var day: Int = 0
+
+    private fun getCurrentDateToDate() {
+        val date = Date()
+        val cal = Calendar.getInstance()
+        cal.time = date
+        year = cal.get(Calendar.YEAR)
+        month = cal.get(Calendar.MONTH)
+        day = cal.get(Calendar.DAY_OF_MONTH)
+
+        val pickerDialog = MonthYearPickerDialog()
+        val currentDate =
+            "${pickerDialog.covertToKhmerNumber(day.toString())} ${pickerDialog.listMonths[month]} ${pickerDialog.covertToKhmerNumber(
+                year.toString()
+            )}"
+
+        var myDatePicker = MonthYearPickerDialog()
+
+        submission_date = "$year-${myDatePicker.addZero(month.toString())}-${myDatePicker.addZero(day.toString())}"
+
+        etDate.setText(currentDate)
+    }
+
+    private fun setTextBold() {
+        tvInstruction.typeface = Typeface.createFromAsset(assets, "Kantumruy_Bold.ttf");
+    }
+
+    private fun checkKeyboardShow() {
+        KeyboardUtils.addKeyboardToggleListener(this, object : KeyboardUtils.SoftKeyboardToggleListener {
+            override fun onToggleSoftKeyboard(isVisible: Boolean) {
+                if (isVisible) {
+                    btnSent.visibility = View.GONE
+                } else {
+                    btnSent.visibility = View.VISIBLE
+                }
+            }
+        })
+    }
+
+    private fun clearText() {
+        etName.setText("")
+        etPhone1.setText("")
+        etPhone2.setText("")
+        etDateOfBirth.setText("")
+        etAge.setText("")
+        spGender.setSelection(0)
+        spEducation.setSelection(0)
+        photoFile = null
+        ivImageFront.setImageDrawable(null)
+        llImageFront.visibility = View.GONE
+    }
+
+    private fun rotateImage(source: Bitmap, angle: Float): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(angle)
+        return Bitmap.createBitmap(
+            source, 0, 0, source.width, source.height,
+            matrix, true
+        )
+    }
+
+    fun rotateImageView(photoPath: String, bitmap: Bitmap): Bitmap? {
+        var ei = ExifInterface(photoPath)
+        var orientation = ei.getAttributeInt(
+            ExifInterface.TAG_ORIENTATION,
+            ExifInterface.ORIENTATION_UNDEFINED
+        );
+
+        var rotatedBitmap: Bitmap? = null
+        when (orientation) {
+
+            ExifInterface.ORIENTATION_ROTATE_90 -> {
+                rotatedBitmap = rotateImage(bitmap, 90F)
+            }
+
+            ExifInterface.ORIENTATION_ROTATE_180 -> {
+                rotatedBitmap = rotateImage(bitmap, 180F)
+            }
+
+            ExifInterface.ORIENTATION_ROTATE_270 -> {
+                rotatedBitmap = rotateImage(bitmap, 270F)
+            }
+
+            ExifInterface.ORIENTATION_NORMAL -> {
+                rotatedBitmap = bitmap
+            }
+            else -> {
+                rotatedBitmap = bitmap
+            }
+        }
+
+        return rotatedBitmap
+    }
+
+
+    /** Create a file Uri for saving an image or video */
+    private fun getOutputMediaFileUri(type: Int): Uri {
+
+        return Uri.fromFile(getOutputMediaFile(type));
+    }
+
+    /** Create a File for saving an image or video */
+    private fun getOutputMediaFile(type: Int): File? {
+
+        // Check that the SDCard is mounted
+        val mediaStorageDir = File(Environment.getExternalStorageDirectory(), Environment.DIRECTORY_PICTURES)
+
+        // Create the storage directory(MyCameraVideo) if it does not exist
+        if (!mediaStorageDir.exists()) {
+
+            if (!mediaStorageDir.mkdirs()) {
+
+                Log.e(
+                    "Item Attachment",
+                    "Failed to create directory MyCameraVideo."
+                );
+
+                return null
+            }
+        }
+        val timeStamp = Date().toString();
+
+        val mediaFile: File
+
+        if (type == 1) {
+
+            // For unique video file name appending current timeStamp with file
+            // name
+            mediaFile = File(mediaStorageDir.path + File.separator + timeStamp + ".jpg");
+
+        } else {
+            return null
+        }
+
+        return mediaFile;
     }
 }

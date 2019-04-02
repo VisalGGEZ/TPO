@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#D72B29</color>
+    <color name="colorPrimarySoft">#0E76BC</color>
+    <color name="colorPrimaryDark">#c11714</color>
+    <color name="colorAccent">#ffffff</color>
+
+    <color name="colorPrimaryPix">#D72B29</color>
+    <color name="colorPrimaryLightPix">#c11714</color>
+
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorWhite80">#80ffffff</color>
+    <color name="colorTextHint">#E0E0E0</color>
+    <color name="colorSoftBlack">#757575</color>
+    <color name="colorBlack">#212121</color>
+    <color name="transparent_background">#80000000</color>
+    <color name="open_camera_bg">#1c1c1c</color>
+    <color name="colorTextLabel">#757575</color>
+    <color name="colorTextValue">#212121</color>
+    <color name="colorPassed">#4CAF50</color>
+    <color name="colorButton">#0E76BC</color>
+    <color name="colorButtonApply">#FFCDD2</color>
+    <color name="colorBGProgress">#EEEEEE</color>
+</resources>

@@ -24,14 +24,14 @@ android {
     productFlavors {
 
         production {
-            buildConfigField "String", "BASE_URL", '"http://209.97.167.164/public/"'
-            buildConfigField "String", "BASIC_KEY", '"7MN7x7acTFYPRzwPJKE1CvaqMBcCx1stDYd9kVGB"'
+            buildConfigField "String", "BASE_URL", '"http://209.97.167.164"'
+            buildConfigField "String", "BASIC_KEY", '"HL9kdedDVDoqKcmcQRUUfiTpBWlK8O63PPQSylSh"'
             dimension "token"
         }
 
         sandbox {
-            buildConfigField "String", "BASE_URL", '"http://209.97.167.164/public/"'
-            buildConfigField "String", "BASIC_KEY", '"7MN7x7acTFYPRzwPJKE1CvaqMBcCx1stDYd9kVGB"'
+            buildConfigField "String", "BASE_URL", '"http://209.97.167.164"'
+            buildConfigField "String", "BASIC_KEY", '"HL9kdedDVDoqKcmcQRUUfiTpBWlK8O63PPQSylSh"'
             dimension "token"
         }
     }

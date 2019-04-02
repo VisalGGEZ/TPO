@@ -31,8 +31,9 @@
 
             <TextView style="@style/TextStyleGeneralAsPrimary"
                       android:layout_marginTop="5dp"
+                      android:id="@+id/tvInstruction"
                       android:layout_gravity="center_horizontal"
-                      android:text="សូមបំពេញ​ និងពិនិត្យព័ត៏មានផ្ទាល់ខ្លួន \nរបស់លោកអ្នកឲ្យបានត្រឹមត្រូវ​"
+                      android:text="សូមបំពេញ និងពិនិត្យព័ត៌មានផ្ទាល់ខ្លួន\nរបស់លោកអ្នកឲ្យបានត្រឹមត្រូវ​"
                       android:gravity="center"/>
 
             <ScrollView
@@ -57,6 +58,7 @@
                     <EditText style="@style/EditTextStyleGeneralPrimary"
                               android:id="@+id/etDate"
                               android:enabled="false"
+                              android:paddingStart="12dp"
                               android:text=""/>
 
                     <ImageView android:layout_width="40dp"
@@ -73,8 +75,10 @@
 
                 <EditText style="@style/EditTextStyleGeneralPrimary"
                           android:layout_marginTop="5dp"
-                          android:id="@+id/etName"
-                          android:tooltipText="ស័រ អធិរាជ"/>
+                          android:paddingStart="12dp"
+                          android:imeOptions="actionDone"
+                          android:singleLine="true"
+                          android:id="@+id/etName"/>
 
                 <TextView style="@style/TextStyleGeneralAsPrimarySizeNormal"
                           android:layout_marginTop="10dp"
@@ -105,7 +109,7 @@
                                   android:layout_weight="1.1" android:layout_height="wrap_content">
 
                         <TextView style="@style/TextStyleGeneralAsPrimarySizeNormal"
-                                  android:text="ថ្ថៃ ខែ ឆ្នាំកំណើត"/>
+                                  android:text="ថ្ងៃ ខែ ឆ្នាំកំណើត"/>
 
                         <RelativeLayout android:layout_width="match_parent"
                                         android:layout_marginTop="5dp"
@@ -115,6 +119,7 @@
                             <EditText style="@style/EditTextStyleGeneralPrimary"
                                       android:id="@+id/etDateOfBirth"
                                       android:enabled="false"
+                                      android:paddingStart="12dp"
                                       android:text=""/>
 
                             <ImageView android:layout_width="40dp"
@@ -142,6 +147,7 @@
                                   android:background="@drawable/edit_text_border_grey"
                                   android:textColor="@color/colorGrey"
                                   android:layout_marginTop="5dp"
+                                  android:paddingStart="12dp"
                                   android:text=""/>
 
 
@@ -151,7 +157,7 @@
 
                 <TextView style="@style/TextStyleGeneralAsPrimarySizeNormal"
                           android:layout_marginTop="10dp"
-                          android:text="កម្រិតវប្បធម៏ ឬកម្រិតសិក្សា​​"/>
+                          android:text="កម្រិតវប្បធម៌ ឬកម្រិតសិក្សា​​"/>
 
                 <RelativeLayout android:layout_width="match_parent"
                                 android:layout_marginTop="5dp"
@@ -181,7 +187,6 @@
                                  android:layout_weight="1"
                                  android:id="@+id/rbOne"
                                  android:text="ចេះ"
-                                 android:checked="true"
                                  android:textSize="14sp"
                                  android:textColor="@color/colorPrimary"
                                  android:layout_height="wrap_content"/>
@@ -196,6 +201,7 @@
 
                     <RadioButton android:layout_width="0dp"
                                  android:layout_weight="1"
+                                 android:checked="true"
                                  android:id="@+id/rbThree"
                                  android:text="មិនចេះ"
                                  android:textSize="14sp"
@@ -216,10 +222,12 @@
 
                         <TextView style="@style/TextStyleGeneralAsPrimarySizeNormal"
                                   android:layout_marginTop="10dp"
-                                  android:text="លេខទុរស័ព្ទខ្សែទី១"/>
+                                  android:text="លេខទូរស័ព្ទខ្សែទី១"/>
 
                         <EditText style="@style/EditTextStyleGeneralPrimary" android:layout_marginTop="5dp"
                                   android:inputType="number"
+                                  android:paddingStart="12dp"
+                                  android:imeOptions="actionDone"
                                   android:text="" android:id="@+id/etPhone1"/>
 
                     </LinearLayout>
@@ -232,11 +240,13 @@
 
                         <TextView style="@style/TextStyleGeneralAsPrimarySizeNormal"
                                   android:layout_marginTop="10dp"
-                                  android:text="លេខទុរស័ព្ទខ្សែទី២"/>
+                                  android:text="លេខទូរស័ព្ទខ្សែទី២"/>
 
                         <EditText style="@style/EditTextStyleGeneralPrimary" android:layout_marginTop="5dp"
                                   android:id="@+id/etPhone2"
                                   android:inputType="number"
+                                  android:paddingStart="12dp"
+                                  android:imeOptions="actionDone"
                                   android:text=""/>
 
                     </LinearLayout>

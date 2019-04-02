@@ -46,7 +46,7 @@ public class MonthYearPickerDialog extends DialogFragment {
     private int yearIndex;
     private int yearPlus;
 
-    public String[] listMonths = {"មករា", "កុម្ភៈ", "មិនា", "មេសា", "ឧសភា", "មិថុនា", "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆកា", "ធ្នូ"};
+    public String[] listMonths = {"មករា", "កុម្ភៈ", "មីនា", "មេសា", "ឧសភា", "មិថុនា", "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆកា", "ធ្នូ"};
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -200,7 +200,7 @@ public class MonthYearPickerDialog extends DialogFragment {
         });
 
         int maxYear = cal.get(Calendar.YEAR);//2018
-        final int minYear = 1980;
+        final int minYear = 1968;
         int arraySize = maxYear - minYear;
 
         String[] tempArray = new String[arraySize];
@@ -319,6 +319,14 @@ public class MonthYearPickerDialog extends DialogFragment {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
         return cal.getActualMaximum(Calendar.DAY_OF_YEAR) > 365;
+    }
+
+    public String addZero(String number) {
+        if (number.length() == 1) {
+            return "0" + number;
+        } else {
+            return number;
+        }
     }
 
     public static boolean isLeapYear2(int year) {

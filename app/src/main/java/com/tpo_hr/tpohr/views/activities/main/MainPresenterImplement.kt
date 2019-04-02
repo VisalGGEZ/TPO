@@ -2,6 +2,7 @@ package com.tpo_hr.tpohr.views.activities.main
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.widget.Toast
 import com.tpo_hr.tpohr.models.AccessTokenRequest
 import com.tpo_hr.tpohr.utils.RxObservable
 import okhttp3.MediaType
@@ -40,13 +41,14 @@ class MainPresenterImplement(
     @SuppressLint("CheckResult")
     override fun registerCandidate(
         authorization: String,
+        submission_date: String,
         photo: File,
         name: String,
         sex: String,
         dob: String,
         age: String,
         education: String,
-        thaiLevel: Int,
+        thaiLevel: String,
         phone1: String,
         phone2: String
     ) {
@@ -58,7 +60,9 @@ class MainPresenterImplement(
 
         RxObservable.wrapAsync(
             mainService.registerCandidate(
+                authorization,
                 toRequestBody(name),
+                toRequestBody(submission_date),
                 toRequestBody(sex),
                 toRequestBody(dob),
                 toRequestBody(age),
@@ -73,9 +77,14 @@ class MainPresenterImplement(
                 if (it.code() == 200) {
                     mainView.onRegisterSuccess()
                 } else {
+                    if(it.code() == 401){
+                        mainView.retryToken()
+                    }
                     mainView.onRegisterFail()
+//                    Toast.makeText(context, it.body()?.message, Toast.LENGTH_LONG).show()
                 }
             }, {
+                Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                 mainView.onHideLoading()
                 mainView.onRegisterFail()
             })

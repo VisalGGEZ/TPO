@@ -13,6 +13,9 @@ import dagger.android.HasServiceInjector
 import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig
+import android.os.StrictMode
+
+
 
 
 
@@ -26,6 +29,10 @@ class TPOApplication  : Application(), HasActivityInjector, HasServiceInjector, 
 
     override fun onCreate() {
         super.onCreate()
+
+        val builder = StrictMode.VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
+
         DaggerApplicationComponent.builder().application(this).build().inject(this)
 
         CalligraphyConfig.initDefault(

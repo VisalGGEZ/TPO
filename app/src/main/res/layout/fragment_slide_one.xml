@@ -6,12 +6,15 @@
                 android:background="@color/colorPrimary"
                 tools:context=".views.activities.slide.fragments.SlideOneFragment">
 
-    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center_horizontal" android:layout_centerInParent="true">
+    <TextView
+            android:id="@+id/tvStandardJapan"
+            style="@style/TextStyleHeaderTitle"
+            android:text="ស្តង់ដាជប៉ុន"/>
 
-        <TextView
-                android:id="@+id/tvStandardJapan"
-                style="@style/TextStyleGeneralAsWhite"
-                android:text="ស្តង់ដាជប៉ុន"/>
+    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:orientation="vertical" android:gravity="center_horizontal"
+                  android:layout_below="@+id/tvStandardJapan"
+                  android:layout_centerInParent="true">
 
         <ImageView android:layout_width="210dp"
                    android:layout_marginTop="36dp"
@@ -21,7 +24,7 @@
 
         <TextView
                 android:id="@+id/tv100FromToyota"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="40dp"
                 android:gravity="center"
                 android:text="ដើមទុន ១០០%\nពីក្រុមហ៊ុនតូយ៉ូតា​"
                 style="@style/TextStyleGeneralAsWhite"/>
