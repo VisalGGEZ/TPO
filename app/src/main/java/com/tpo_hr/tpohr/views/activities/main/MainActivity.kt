@@ -125,7 +125,6 @@ class MainActivity : AppCompatActivity(), MainView {
             hideKeyboard(this)
         }
 
-
         ivDate.setOnClickListener {
             val myDatePicker = MonthYearPickerDialog.newInstance(month, day, year, 0, MonthYearPickerDialog.DD_MM_YYYY)
 
@@ -140,9 +139,8 @@ class MainActivity : AppCompatActivity(), MainView {
                 this.month = month
                 this.year = year
 
-
                 submission_date =
-                    "$year-${myDatePicker.addZero(month.toString())}-${myDatePicker.addZero(dayOfMonth.toString())}"
+                        "$year-${myDatePicker.addZero(month.toString())}-${myDatePicker.addZero(dayOfMonth.toString())}"
             }
 
             myDatePicker.show(supportFragmentManager, "Select Date")
@@ -160,7 +158,8 @@ class MainActivity : AppCompatActivity(), MainView {
         })
 
         ivDateOfBirth.setOnClickListener {
-            val myDatePicker = MonthYearPickerDialog.newInstance(mMonthAge, mDayAge, mYearAge, 0, MonthYearPickerDialog.DD_MM_YYYY)
+            val myDatePicker =
+                MonthYearPickerDialog.newInstance(mMonthAge, mDayAge, mYearAge, 0, MonthYearPickerDialog.DD_MM_YYYY)
 
             myDatePicker.setListener { _, year, month, dayOfMonth ->
                 etDateOfBirth.setText(
@@ -265,21 +264,42 @@ class MainActivity : AppCompatActivity(), MainView {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 CAMERA_PHOTO_REQUEST_CODE -> {
+
+                    onLoading()
+
+                    btnSent.isEnabled
+
 //                    val bitmap = data?.extras?.get("data") as Bitmap
 //                    bitmap.let {
 
-                        // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+                    // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
 //                        val tempUri = getImageUri(this@MainActivity, it)
 
-                        // CALL THIS METHOD TO GET THE ACTUAL PATH
+                    // CALL THIS METHOD TO GET THE ACTUAL PATH
 //                        photoFile = File(getRealPathFromURI(tempUri))
 
-                        photoFile = File(PathUtils.getPath(this, cameraImageUri))
+                    photoFile = File(PathUtils.getPath(this, cameraImageUri))
 
-                        val rotateImageURI = rotateImageView(photoFile!!.absolutePath, BitmapFactory.decodeFile(photoFile!!.path))
+                    Compressor(this)
+                        .setQuality(80)
+                        .compressToFileAsFlowable(photoFile)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            photoFile = it
+                            onHideLoading()
+                            btnSent
+                        }, {
+                            onHideLoading()
+                            btnSent
+                            Toast.makeText(this, it.message.toString(), Toast.LENGTH_LONG).show()
+                        })
 
-                        ivImageFront.setImageBitmap(rotateImageURI)
-                        llImageFront.visibility = View.VISIBLE
+                    val rotateImageURI =
+                        rotateImageView(photoFile!!.absolutePath, BitmapFactory.decodeFile(photoFile!!.path))
+
+                    ivImageFront.setImageBitmap(rotateImageURI)
+                    llImageFront.visibility = View.VISIBLE
 //                    }
                 }
 
@@ -631,29 +651,25 @@ class MainActivity : AppCompatActivity(), MainView {
     /** Create a file Uri for saving an image or video */
     private fun getOutputMediaFileUri(type: Int): Uri {
 
-        return Uri.fromFile(getOutputMediaFile(type));
+        var outputMediaFile = getOutputMediaFile(type)
+        return Uri.fromFile(outputMediaFile)
     }
 
     /** Create a File for saving an image or video */
     private fun getOutputMediaFile(type: Int): File? {
 
         // Check that the SDCard is mounted
-        val mediaStorageDir = File(Environment.getExternalStorageDirectory(), Environment.DIRECTORY_PICTURES)
+        val mediaStorageDir = File(Environment.getExternalStorageDirectory(), Environment.DIRECTORY_DOCUMENTS)
 
         // Create the storage directory(MyCameraVideo) if it does not exist
         if (!mediaStorageDir.exists()) {
 
             if (!mediaStorageDir.mkdirs()) {
-
-                Log.e(
-                    "Item Attachment",
-                    "Failed to create directory MyCameraVideo."
-                );
-
+                Log.e("Item Attachment", "Failed to create directory MyCameraVideo.")
                 return null
             }
         }
-        val timeStamp = Date().toString();
+        val timeStamp = Calendar.getInstance().timeInMillis.toString()
 
         val mediaFile: File
 
@@ -661,7 +677,7 @@ class MainActivity : AppCompatActivity(), MainView {
 
             // For unique video file name appending current timeStamp with file
             // name
-            mediaFile = File(mediaStorageDir.path + File.separator + timeStamp + ".jpg");
+            mediaFile = File(mediaStorageDir.path + File.separator + timeStamp + ".jpg")
 
         } else {
             return null

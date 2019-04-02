@@ -44,11 +44,11 @@ public class PathUtils {
                     uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
                 }
                 selection = "_id=?";
-                selectionArgs = new String[]{ split[1] };
+                selectionArgs = new String[]{split[1]};
             }
         }
         if ("content".equalsIgnoreCase(uri.getScheme())) {
-            String[] projection = { MediaStore.Images.Media.DATA };
+            String[] projection = {MediaStore.Images.Media.DATA};
             Cursor cursor = null;
             try {
                 cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
@@ -63,7 +63,6 @@ public class PathUtils {
         }
         return null;
     }
-
 
     /**
      * @param uri The Uri to check.
